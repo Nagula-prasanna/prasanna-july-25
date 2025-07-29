@@ -1,0 +1,27 @@
+class Solution(object):
+    def threeSum(self, nums):
+        nums.sort()
+        res = []
+        def find_two_sum(start, target, i_val):
+            def helper(low, high):
+                if low >= high:
+                    return
+                current_sum = nums[low] + nums[high]
+                if current_sum == target:
+                    res.append([i_val, nums[low], nums[high]])
+                    # Move pointers to skip duplicates
+                    while low < high and nums[low] == nums[low + 1]:
+                        low += 1
+                    while low < high and nums[high] == nums[high - 1]:
+                        high -= 1
+                    helper(low + 1, high - 1)
+                elif current_sum < target:
+                    helper(low + 1, high)
+                else:
+                    helper(low, high - 1)
+            helper(start, len(nums) - 1)
+        for i in range(len(nums)):
+            if i > 0 and nums[i] == nums[i - 1]:  # Skip duplicate first elements
+                continue
+            find_two_sum(i + 1, -nums[i], nums[i])
+        return res
